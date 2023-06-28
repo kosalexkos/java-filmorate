@@ -9,8 +9,6 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = AfterDateValidator.class)
 public @interface AfterDate {
     String message() default "Date must be after 1895-12-28";
-
     Class<?>[] groups() default {};
-
     Class<? extends Payload>[] payload() default {};
 }

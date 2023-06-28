@@ -24,6 +24,7 @@ public class Film {
     private LocalDate releaseDate;
     @PositiveOrZero(message = "Film duration cannot be less than zero")
     private int duration;
+
     public Film(@NotNull String name, String description, LocalDate releaseDate, int duration) {
         this.name = name;
         this.description = description;

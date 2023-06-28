@@ -18,6 +18,7 @@ public class User {
     private String nickname;
     @PastOrPresent
     private LocalDate birthday;
+
     public User(@NotBlank String email, @NotBlank String login, String nickname, LocalDate birthday) {
         this.email = email;
         this.login = login;

@@ -17,10 +17,12 @@ public class FilmRepository {
         this.id = 0;
         this.films = new HashMap<>();
     }
+
     public void save(Film f) {
         this.films.put(f.getId(), f);
         log.info("Film was successfully saved");
     }
+
     public int generateId() {
         log.info("Generated an id for the film");
         return this.id++;
