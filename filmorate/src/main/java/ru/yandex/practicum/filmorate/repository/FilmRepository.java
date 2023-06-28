@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.repository;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.model.Film;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,14 +22,7 @@ public class FilmRepository {
         log.info("Film was successfully saved");
     }
     public int generateId() {
-        log.info("Generated an id for film");
+        log.info("Generated an id for the film");
         return this.id++;
-    }
-    public Film getById(int id) throws IOException {
-        if (!films.containsKey(id)) {
-            throw new IOException("Incorrect id");
-        }
-        log.info("Returned film by id");
-        return films.get(id);
     }
 }

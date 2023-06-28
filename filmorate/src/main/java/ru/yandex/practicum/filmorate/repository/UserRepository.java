@@ -27,11 +27,4 @@ public class UserRepository {
         log.info("Generated an id for a user");
         return this.id++;
     }
-    public User getById(int id) throws IOException {
-        if (!users.containsKey(id)) {
-            throw new IOException("Incorrect id");
-        }
-        log.info("Returned user by id");
-        return users.get(id);
-    }
 }
