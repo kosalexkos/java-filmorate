@@ -15,11 +15,11 @@ public class UserRepository {
     @Getter
     private final Map<Integer, User> users;
 
-    public UserRepository () {
+    public UserRepository() {
         this.id = 0;
         this.users = new HashMap<>();
     }
-    public void save (User u) {
+    public void save(User u) {
         this.users.put(u.getId(), u);
         log.info("User was successfully saved");
     }

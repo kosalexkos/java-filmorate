@@ -20,14 +20,13 @@ public class UserController {
     public UserController() {
         usersStorage = new UserRepository();
     }
-
     @GetMapping
-    public List<User> getAll () {
+    public List<User> getAll() {
         log.info("Request to get list of all users");
         return new ArrayList<>(usersStorage.getUsers().values());
     }
     @PostMapping
-    public void createUser (@Valid @RequestBody User user) {
+    public void createUser(@Valid @RequestBody User user) {
         log.info("Request to create a new user");
         user.setId(usersStorage.generateId());
         if(user.getNickname().isEmpty()) {
@@ -36,8 +35,7 @@ public class UserController {
         usersStorage.save(user);
     }
     @PutMapping("/{userId}")
-    public void updateUser (@Valid @RequestBody User user) {
-
+    public void updateUser(@Valid @RequestBody User user) {
         if (!usersStorage.getUsers().containsKey(user.getId())) {
             log.info("Failed to find user to update");
             throw new ValidationException("Failed to update userdata. User not found");

@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
 public class TestFilmController {
-
     Validator validator;
     private FilmController filmController;
 
@@ -28,7 +27,6 @@ public class TestFilmController {
         validator = factory.getValidator();
         filmController = new FilmController();
     }
-
     @Test
     void shouldCreateFilm() {
         Film film = new Film("007", "James Bond film",
@@ -42,7 +40,6 @@ public class TestFilmController {
         assertEquals(film.getReleaseDate(), f.getReleaseDate());
         assertEquals(film.getDuration(), f.getDuration());
     }
-
     @Test
     void shouldUpdateFilm () {
         Film f1 = (new Film("AAA", "A",
@@ -57,7 +54,6 @@ public class TestFilmController {
         assertEquals(1, filmController.getFilmsStorage().getFilms().size());
         assertEquals(f3, filmController.getFilmsStorage().getFilms().get(0));
     }
-
     @Test
     void shouldReturnListOfFilms() {
         filmController.createFilm(new Film("AAA", "AAAAAAAAA",
@@ -66,7 +62,6 @@ public class TestFilmController {
                 LocalDate.of(1996,8,15), 441));
         assertEquals(2, filmController.getFilmsStorage().getFilms().size());
     }
-
     @Test
     void createEmptyNameFilm() {
         Film f = new Film("","AAAAA",
@@ -75,7 +70,6 @@ public class TestFilmController {
         Set<ConstraintViolation<Film>> violations = validator.validate(f);
         assertFalse(violations.isEmpty());
     }
-
     @Test
     void createWrongDescriptionFilm() {
         Film f = new Film("AAAAAAA", new String(new char[205]),
@@ -84,7 +78,6 @@ public class TestFilmController {
         Set<ConstraintViolation<Film>> violations = validator.validate(f);
         assertFalse(violations.isEmpty());
     }
-
     @Test
     void createWrongDateFilm() {
         Film film = new Film("aaaa", "bbbbbb",
@@ -93,7 +86,6 @@ public class TestFilmController {
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         assertFalse(violations.isEmpty());
     }
-
     @Test
     void createWrongDurationFilm() {
         Film film = new Film("SSSSSSS", "sssssssssss",

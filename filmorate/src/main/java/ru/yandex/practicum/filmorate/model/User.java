@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
@@ -19,7 +18,6 @@ public class User {
     private String nickname;
     @PastOrPresent
     private LocalDate birthday;
-
     public User(@NotBlank String email, @NotBlank String login, String nickname, LocalDate birthday) {
         this.email = email;
         this.login = login;

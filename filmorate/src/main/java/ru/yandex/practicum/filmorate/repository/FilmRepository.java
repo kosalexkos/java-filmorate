@@ -13,11 +13,11 @@ public class FilmRepository {
     @Getter
     private final Map<Integer, Film> films;
 
-    public FilmRepository () {
+    public FilmRepository() {
         this.id = 0;
         this.films = new HashMap<>();
     }
-    public void save (Film f) {
+    public void save(Film f) {
         this.films.put(f.getId(), f);
         log.info("Film was successfully saved");
     }
