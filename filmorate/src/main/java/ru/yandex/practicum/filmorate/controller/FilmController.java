@@ -1,13 +1,12 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.repository.FilmRepository;
-
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class FilmController {
     public void updateFilm (@Valid @RequestBody Film film) {
         if (!filmsStorage.getFilms().containsKey(film.getId())) {
             log.info("Failed to find film to update");
-            throw new RuntimeException("Failed to update film data. Film not found");
+            throw new ValidationException("Failed to update film data. Film not found");
         }
         log.info("Request to update user");
         filmsStorage.getFilms().put(film.getId(), film);

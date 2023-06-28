@@ -1,9 +1,9 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.repository.UserRepository;
 import javax.validation.Valid;
@@ -40,7 +40,7 @@ public class UserController {
 
         if (!usersStorage.getUsers().containsKey(user.getId())) {
             log.info("Failed to find user to update");
-            throw new RuntimeException("Failed to update userdata. User not found");
+            throw new ValidationException("Failed to update userdata. User not found");
         }
         log.info("Request to update user");
         usersStorage.getUsers().put(user.getId(), user);

@@ -6,7 +6,6 @@ import lombok.NonNull;
 import org.hibernate.validator.constraints.Length;
 import org.jetbrains.annotations.NotNull;
 import ru.yandex.practicum.filmorate.validation.AfterDate;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.PositiveOrZero;
