@@ -27,12 +27,11 @@ public class UserController {
         log.info("Request to get list of all users");
         return new ArrayList<>(usersStorage.getUsers().values());
     }
-
     @PostMapping
     public void createUser(@Valid @RequestBody User user) {
         log.info("Request to create a new user");
         user.setId(usersStorage.generateId());
-        if(user.getNickname().isEmpty()) {
+        if (user.getNickname().isEmpty()) {
             user.setNickname(user.getLogin());
         }
         usersStorage.save(user);
