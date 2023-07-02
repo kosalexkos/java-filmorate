@@ -20,12 +20,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class TestUserController {
     Validator validator;
     private UserController userController;
+
     @BeforeEach
     void beforeEach() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
         userController = new UserController();
     }
+
     @Test
     void shouldCreateUser() {
         User user = new User("aaa@gmail.com", "Nagibator3000", "vasya",
@@ -33,6 +35,7 @@ public class TestUserController {
         userController.createUser(user);
         assertEquals(0, user.getId());
     }
+
     @Test
     void shouldUpdateUser() {
         User user1 = new User("example1@gmail.com", "ddd", "sssss",
@@ -46,6 +49,7 @@ public class TestUserController {
         assertEquals(1, userController.getUsersStorage().getUsers().size());
         assertEquals(user3, userController.getUsersStorage().getUsers().get(0));
     }
+
     @Test
     void shouldSetNameIfEmpty() {
         User user = new User("ex@gmail.com", "ddd", "",
@@ -53,6 +57,7 @@ public class TestUserController {
         userController.createUser(user);
         assertEquals(user.getLogin(), user.getNickname());
     }
+
     @Test
     void createWrongEmailUser() {
         User user = new User("0000",
@@ -61,6 +66,7 @@ public class TestUserController {
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         assertFalse(violations.isEmpty());
     }
+
     @Test
     void createWrongLoginUser() {
         User user = new User("ex@gmail.com",
@@ -69,6 +75,7 @@ public class TestUserController {
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         assertFalse(violations.isEmpty());
     }
+
     @Test
     void createWrongBirthdayUser() {
         User user = new User("ex@gmail.com",
