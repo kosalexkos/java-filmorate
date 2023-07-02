@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.model;
 
-
 import lombok.Data;
 import lombok.NonNull;
 import org.hibernate.validator.constraints.Length;
