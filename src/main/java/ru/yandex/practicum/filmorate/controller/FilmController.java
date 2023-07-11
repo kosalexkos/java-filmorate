@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @Getter
-@RequestMapping("/films")
+@RequestMapping(value = "/films", produces = "application/json")
 
 public class FilmController {
     private FilmRepository filmsStorage;

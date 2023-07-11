@@ -25,6 +25,6 @@ public class FilmRepository {
 
     public int generateId() {
         log.info("Generated an id for the film");
-        return this.id++;
+        return ++id;
     }
 }

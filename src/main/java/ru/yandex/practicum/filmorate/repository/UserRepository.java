@@ -25,6 +25,6 @@ public class UserRepository {
 
     public int generateId() {
         log.info("Generated an id for a user");
-        return this.id++;
+        return ++id;
     }
 }
