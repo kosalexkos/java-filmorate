@@ -33,8 +33,8 @@ public class TestFilmController {
         Film film = new Film("007", "James Bond film",
                 LocalDate.of(1968,12,16), 244);
         filmController.createFilm(film);
-        Film f = filmController.getFilmsStorage().getFilms().get(0);
-        assertEquals(0, f.getId());
+        Film f = filmController.getFilmsStorage().getFilms().get(1);
+        assertEquals(1, f.getId());
         assertEquals(film.getName(), f.getName());
         assertEquals(film.getDescription(), f.getDescription());
         assertEquals(film.getReleaseDate(), f.getReleaseDate());
@@ -50,9 +50,9 @@ public class TestFilmController {
                 LocalDate.of(2000,8,15), 350);
         f2.setId(f1.getId());
         filmController.updateFilm(f2);
-        Film f3 = filmController.getFilmsStorage().getFilms().get(0);
+        Film f3 = filmController.getFilmsStorage().getFilms().get(1);
         assertEquals(1, filmController.getFilmsStorage().getFilms().size());
-        assertEquals(f3, filmController.getFilmsStorage().getFilms().get(0));
+        assertEquals(f3, filmController.getFilmsStorage().getFilms().get(1));
     }
 
     @Test

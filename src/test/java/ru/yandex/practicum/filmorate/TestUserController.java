@@ -33,7 +33,7 @@ public class TestUserController {
         User user = new User("aaa@gmail.com", "Nagibator3000", "vasya",
                 LocalDate.of(1996,10,15));
         userController.createUser(user);
-        assertEquals(0, user.getId());
+        assertEquals(1, user.getId());
     }
 
     @Test
@@ -45,9 +45,9 @@ public class TestUserController {
                 "eeeee", LocalDate.of(1595,11,28));
         user2.setId(user1.getId());
         userController.updateUser(user2);
-        User user3 = userController.getUsersStorage().getUsers().get(0);
+        User user3 = userController.getUsersStorage().getUsers().get(1);
         assertEquals(1, userController.getUsersStorage().getUsers().size());
-        assertEquals(user3, userController.getUsersStorage().getUsers().get(0));
+        assertEquals(user3, userController.getUsersStorage().getUsers().get(1));
     }
 
     @Test
