@@ -11,11 +11,9 @@ import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 @Data
-@Builder
 public class User {
     private int id;
     @Email
-    @NonNull
     private String email;
     @Pattern(regexp = "^[^\\s]+$", message = "String should not contain spaces")
     @NotBlank
@@ -23,4 +21,11 @@ public class User {
     private String name;
     @PastOrPresent
     private LocalDate birthday;
+
+    public User(@NotBlank String email, @NotBlank String login, String nickname, LocalDate birthday) {
+        this.email = email;
+        this.login = login;
+        this.name = nickname;
+        this.birthday = birthday;
+    }
 }

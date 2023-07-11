@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @Getter
-@RequestMapping(value = "/users", produces = "application/json")
+@RequestMapping("/users")
 
 public class UserController {
     private UserRepository usersStorage;
