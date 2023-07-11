@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @Getter
-@RequestMapping("/users")
+@RequestMapping(value = "/users", produces = "application/json")
 
 public class UserController {
     private UserRepository usersStorage;
@@ -32,8 +32,8 @@ public class UserController {
     public void createUser(@Valid @RequestBody User user) {
         log.info("Request to create a new user");
         user.setId(usersStorage.generateId());
-        if (user.getNickname().isEmpty()) {
-            user.setNickname(user.getLogin());
+        if (user.getName().isEmpty()) {
+            user.setName(user.getLogin());
         }
         usersStorage.save(user);
     }
