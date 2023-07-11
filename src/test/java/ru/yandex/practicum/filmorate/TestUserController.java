@@ -55,7 +55,7 @@ public class TestUserController {
         User user = new User("ex@gmail.com", "ddd", "",
                 LocalDate.of(1986,4,26));
         userController.createUser(user);
-        assertEquals(user.getLogin(), user.getNickname());
+        assertEquals(user.getLogin(), user.getName());
     }
 
     @Test
