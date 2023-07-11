@@ -29,19 +29,21 @@ public class FilmController {
     }
 
     @PostMapping
-    public void createFilm(@Valid @RequestBody Film film) {
+    public Film createFilm(@Valid @RequestBody Film film) {
         log.info("Request to create a new film");
         film.setId(filmsStorage.generateId());
         filmsStorage.save(film);
+        return film;
     }
 
-    @PutMapping("/{userId}")
-    public void updateFilm(@Valid @RequestBody Film film) {
+    @PutMapping("/{id}")
+    public Film updateFilm(@Valid @RequestBody Film film) {
         if (!filmsStorage.getFilms().containsKey(film.getId())) {
             log.info("Failed to find film to update");
             throw new ValidationException("Failed to update film data. Film not found");
         }
         log.info("Request to update user");
         filmsStorage.getFilms().put(film.getId(), film);
+        return film;
     }
 }

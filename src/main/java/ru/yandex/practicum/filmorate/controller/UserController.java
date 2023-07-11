@@ -29,22 +29,24 @@ public class UserController {
     }
 
     @PostMapping
-    public void createUser(@Valid @RequestBody User user) {
+    public User createUser(@Valid @RequestBody User user) {
         log.info("Request to create a new user");
         user.setId(usersStorage.generateId());
         if (user.getName().isEmpty()) {
             user.setName(user.getLogin());
         }
         usersStorage.save(user);
+        return user;
     }
 
-    @PutMapping("/{userId}")
-    public void updateUser(@Valid @RequestBody User user) {
+    @PutMapping("/{id}")
+    public User updateUser(@Valid @RequestBody User user) {
         if (!usersStorage.getUsers().containsKey(user.getId())) {
             log.info("Failed to find user to update");
             throw new ValidationException("Failed to update userdata. User not found");
         }
         log.info("Request to update user");
         usersStorage.getUsers().put(user.getId(), user);
+        return user;
     }
 }
