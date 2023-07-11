@@ -32,7 +32,7 @@ public class UserController {
     public User createUser(@Valid @RequestBody User user) {
         log.info("Request to create a new user");
         user.setId(usersStorage.generateId());
-        if (user.getName().isEmpty()) {
+        if (user.getName() == null || user.getName().isEmpty()) {
             user.setName(user.getLogin());
         }
         usersStorage.save(user);
