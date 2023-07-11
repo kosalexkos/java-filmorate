@@ -36,7 +36,7 @@ public class FilmController {
         return film;
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     public Film updateFilm(@Valid @RequestBody Film film) {
         if (!filmsStorage.getFilms().containsKey(film.getId())) {
             log.info("Failed to find film to update");

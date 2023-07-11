@@ -39,9 +39,9 @@ public class UserController {
         return user;
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     public User updateUser(@Valid @RequestBody User user) {
-        if (!usersStorage.getUsers().containsKey(user.getId())) {
+        if (!(usersStorage.getUsers().containsKey(user.getId()))) {
             log.info("Failed to find user to update");
             throw new ValidationException("Failed to update userdata. User not found");
         }
