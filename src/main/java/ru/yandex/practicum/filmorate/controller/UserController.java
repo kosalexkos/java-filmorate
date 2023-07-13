@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -12,14 +12,13 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@Getter
 @RequestMapping(value = "/users", produces = "application/json")
-
 public class UserController {
-    private UserRepository usersStorage;
+    private final UserRepository usersStorage;
 
-    public UserController() {
-        usersStorage = new UserRepository();
+    @Autowired
+    public UserController(UserRepository usersStorage) {
+        this.usersStorage = usersStorage;
     }
 
     @GetMapping
@@ -31,11 +30,10 @@ public class UserController {
     @PostMapping
     public User createUser(@Valid @RequestBody User user) {
         log.info("Request to create a new user");
-        user.setId(usersStorage.generateId());
         if (user.getName() == null || user.getName().isEmpty()) {
             user.setName(user.getLogin());
         }
-        usersStorage.save(user);
+        this.usersStorage.save(user);
         return user;
     }
 

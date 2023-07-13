@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.repository.FilmRepository;
@@ -14,12 +16,12 @@ import java.util.List;
 @RestController
 @Getter
 @RequestMapping(value = "/films", produces = "application/json")
-
 public class FilmController {
-    private FilmRepository filmsStorage;
+    private final FilmRepository filmsStorage;
 
-    public FilmController() {
-        filmsStorage = new FilmRepository();
+    @Autowired
+    public FilmController(FilmRepository filmsStorage) {
+        this.filmsStorage = filmsStorage;
     }
 
     @GetMapping
@@ -31,7 +33,6 @@ public class FilmController {
     @PostMapping
     public Film createFilm(@Valid @RequestBody Film film) {
         log.info("Request to create a new film");
-        film.setId(filmsStorage.generateId());
         filmsStorage.save(film);
         return film;
     }

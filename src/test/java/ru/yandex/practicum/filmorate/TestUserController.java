@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.repository.UserRepository;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -25,14 +27,13 @@ public class TestUserController {
     void beforeEach() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
-        userController = new UserController();
+        userController = new UserController(new UserRepository());
     }
 
     @Test
     void shouldCreateUser() {
-        User user = new User("aaa@gmail.com", "Nagibator3000", "vasya",
-                LocalDate.of(1996,10,15));
-        userController.createUser(user);
+        User user = userController.createUser(new User("aaa@gmail.com", "Nagibator3000", "vasya",
+                LocalDate.of(1996,10,15)));
         assertEquals(1, user.getId());
     }
 
@@ -45,9 +46,9 @@ public class TestUserController {
                 "eeeee", LocalDate.of(1595,11,28));
         user2.setId(user1.getId());
         userController.updateUser(user2);
-        User user3 = userController.getUsersStorage().getUsers().get(1);
-        assertEquals(1, userController.getUsersStorage().getUsers().size());
-        assertEquals(user3, userController.getUsersStorage().getUsers().get(1));
+        User user3 = userController.getAll().get(0);
+        assertEquals(1, userController.getAll().size());
+        assertEquals(user3, userController.getAll().get(0));
     }
 
     @Test
