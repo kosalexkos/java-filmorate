@@ -5,6 +5,8 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -31,10 +33,9 @@ public class TestFilmController {
 
     @Test
     void shouldCreateFilm() {
-        Film film = new Film("007", "James Bond film",
-                LocalDate.of(1968,12,16), 244);
-        filmController.createFilm(film);
-        Film f = filmController.getFilmsStorage().getFilms().get(1);
+        Film film = filmController.createFilm(new Film("007", "James Bond film",
+                LocalDate.of(1968,12,16), 244));
+        Film f = filmController.getAll().get(0);
         assertEquals(1, f.getId());
         assertEquals(film.getName(), f.getName());
         assertEquals(film.getDescription(), f.getDescription());
@@ -51,18 +52,20 @@ public class TestFilmController {
                 LocalDate.of(2000,8,15), 350);
         f2.setId(f1.getId());
         filmController.updateFilm(f2);
-        Film f3 = filmController.getFilmsStorage().getFilms().get(1);
-        assertEquals(1, filmController.getFilmsStorage().getFilms().size());
-        assertEquals(f3, filmController.getFilmsStorage().getFilms().get(1));
+        Film f3 = filmController.getAll().get(0);
+        assertEquals(1, filmController.getAll().size());
+        assertEquals(f3, filmController.getAll().get(0));
     }
 
     @Test
     void shouldReturnListOfFilms() {
-        filmController.createFilm(new Film("AAA", "AAAAAAAAA",
-                LocalDate.of(1986,4,26), 598));
-        filmController.createFilm(new Film("AA", "AAAAAAAA",
-                LocalDate.of(1996,8,15), 441));
-        assertEquals(2, filmController.getFilmsStorage().getFilms().size());
+        List<Film> l = List.of(
+                filmController.createFilm(new Film("AAA", "AAAAAAAAA",
+                LocalDate.of(1986,4,26), 598)),
+                filmController.createFilm(new Film("AA", "AAAAAA",
+                LocalDate.of(1996,8,15), 441)));
+        assertEquals(2, filmController.getAll().size());
+        assertEquals(l, filmController.getAll());
     }
 
     @Test
