@@ -79,7 +79,7 @@ public class UserController {
         return ResponseEntity.ok(f);
     }
 
-    @GetMapping("/{id}/friends/common/{otherId}")
+    @GetMapping("/{id}/friends/common/{friendId}")
     public ResponseEntity<List<User>> getCommonFriends(@PathVariable int id, @PathVariable int friendId) {
         log.info("Request to show common friends with user with id " + friendId);
         List<User> list = service.getCommonFriends(id, friendId);
