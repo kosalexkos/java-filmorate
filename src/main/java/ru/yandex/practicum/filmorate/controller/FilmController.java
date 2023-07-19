@@ -10,7 +10,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 @RestController
@@ -77,9 +76,9 @@ public class FilmController {
     }
 
     @GetMapping("/popular")
-    public ResponseEntity<Set<Film>> getTopFilms(@RequestParam(defaultValue = "10") int count) {
+    public ResponseEntity<List<Film>> getTopFilms(@RequestParam(defaultValue = "10") int count) {
         log.info("Request to get top ten films");
-        Set<Film> topTen = service.getTopTen(count);
+        List<Film> topTen = service.getTopTen(count);
         return ResponseEntity.ok(topTen);
     }
 }

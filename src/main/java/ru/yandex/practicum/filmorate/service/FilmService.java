@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @Service
@@ -77,10 +77,10 @@ public class FilmService {
         return f.getLikes().size();
     }
 
-    public TreeSet<Film> getTopTen(int count) {
+    public List<Film> getTopTen(int count) {
         return storage.getData().stream()
                 .sorted(Comparator.comparing(film -> film.getLikes().size()))
                 .limit(count)
-                .collect(Collectors.toCollection(TreeSet::new));
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

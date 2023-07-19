@@ -74,7 +74,7 @@ public class UserService {
         if (!u1.getFriends().contains(friendId)) {
             throw new DataNotFoundException("User with id " + id + " doesn't have friend with id " + friendId);
         }
-        if (!u2.getFriends().contains(friendId)) {
+        if (!u2.getFriends().contains(id)) {
             throw new DataNotFoundException("User with id " + friendId + " doesn't have friend with id " + id);
         }
         u1.getFriends().remove(friendId);
