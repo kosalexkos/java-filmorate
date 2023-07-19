@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.repository.UserRepository;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -26,12 +27,12 @@ public class TestUserController {
     void beforeEach() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
-        userController = new UserController(new UserRepository());
+        userController = new UserController(new UserService(new InMemoryUserStorage()));
     }
 
     @Test
     void shouldCreateUser() {
-        User user = userController.createUser(new User("aaa@gmail.com", "Nagibator3000", "vasya",
+        User user = userController.createUser(new User("aaa@gmail.com", "aaaa000", "vasya",
                 LocalDate.of(1996,10,15)));
         assertEquals(1, user.getId());
     }
