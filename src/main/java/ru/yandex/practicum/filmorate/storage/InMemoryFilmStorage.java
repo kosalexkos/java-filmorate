@@ -47,9 +47,10 @@ public class InMemoryFilmStorage implements FilmStorage {
         films.put(f.getId(), f);
         log.info("Film was successfully updated");
     }
+
     @Override
     public Film getById(int id) {
-        if(!films.containsKey(id)) {
+        if (!films.containsKey(id)) {
             log.info("Film not found");
             throw new DataNotFoundException("Wrong film id");
         }
