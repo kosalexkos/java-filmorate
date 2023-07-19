@@ -76,9 +76,9 @@ public class FilmController {
     }
 
     @GetMapping("/popular")
-    public ResponseEntity<List<Film>> getTopFilms(@RequestParam(defaultValue = "10") int count) {
+    public List<Film> getTopFilms(@RequestParam(defaultValue = "10") int count) {
         log.info("Request to get top ten films");
         List<Film> topTen = service.getTopTen(count);
-        return ResponseEntity.ok(topTen);
+        return topTen;
     }
 }
