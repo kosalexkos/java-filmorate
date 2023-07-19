@@ -91,11 +91,8 @@ public class UserService {
 
     public List<User> getCommonFriends(int id, int friendId) {
         log.info("Processing request to get common friends with user with id " + friendId);
-        User u1 = storage.getById(id);
-        User u2 = storage.getById(friendId);
-        Set<Integer> u2Friends = u2.getFriends();
-        return u1.getFriends().stream()
-                .filter(u2Friends::contains)
-                .map(storage::getById).collect(Collectors.toList());
+        List<User> list = getFriendsList(id);
+        list.retainAll(getFriendsList(friendId));
+        return list;
     }
 }
