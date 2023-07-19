@@ -9,13 +9,13 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 @RestControllerAdvice
 public class MistakeHandler {
 
-    @ExceptionHandler
+    @ExceptionHandler({DataNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleDataNotFoundException(final DataNotFoundException e) {
         return e.getMessage();
     }
 
-    @ExceptionHandler
+    @ExceptionHandler({ValidationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleValidationException(final ValidationException e) {
         return e.getMessage();
