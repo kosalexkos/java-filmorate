@@ -7,9 +7,8 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
-
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 @Service
 @Slf4j
@@ -75,10 +74,7 @@ public class FilmService {
         return f.getLikes().size();
     }
 
-    public List<Film> getTopTen(int count) {
-        return storage.getData().stream()
-                .sorted(Collections.reverseOrder(Comparator.comparingInt(film -> film.getLikes().size())))
-                .limit(count)
-                .collect(Collectors.toList());
+    public List<Film> getTopFilms(int count) {
+        return storage.getTop(count);
     }
 }

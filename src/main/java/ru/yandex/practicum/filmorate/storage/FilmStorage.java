@@ -19,4 +19,6 @@ public interface FilmStorage {
     void deleteById(int id);
 
     void deleteAll();
+
+    List<Film> getTop(int count);
 }

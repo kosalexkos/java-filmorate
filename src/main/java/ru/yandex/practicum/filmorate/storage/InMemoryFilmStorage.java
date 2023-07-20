@@ -4,10 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -71,5 +69,13 @@ public class InMemoryFilmStorage implements FilmStorage {
     public void deleteAll() {
         films.clear();
         log.info("All films were successfully deleted");
+    }
+
+    @Override
+    public List<Film> getTop(int count) {
+        return films.values().stream()
+                .sorted(Collections.reverseOrder(Comparator.comparingInt(film -> film.getLikes().size())))
+                .limit(count)
+                .collect(Collectors.toList());
     }
 }
