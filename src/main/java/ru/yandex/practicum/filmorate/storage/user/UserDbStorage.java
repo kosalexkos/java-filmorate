@@ -55,8 +55,8 @@ public class UserDbStorage implements UserStorage {
         u.getFriends().addAll(getById(u.getId()).getFriends());
         String query = "UPDATE Users " +
                 "SET email = ?, login = ?, name = ?, birthday = ? WHERE user_id = ?";
-        jdbcTemplate.update(query, u.getEmail(), u.getLogin(), u.getName()
-                , u.getBirthday(), u.getId());
+        jdbcTemplate.update(query, u.getEmail(), u.getLogin(), u.getName(),
+                u.getBirthday(), u.getId());
         if (u.getFriends().size() > 0) {
             query = "INSERT INTO Friends (user_id, friend_id)" +
                     "VALUES (?, ?)";
@@ -71,8 +71,8 @@ public class UserDbStorage implements UserStorage {
     public User getById(int id) throws ResponseStatusException {
         if (!containsUser(id)) {
             log.info("User not found");
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND
-                    , "User with the id = " + id + " not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "User with the id = " + id + " not found");
         }
         String query = "SELECT * FROM Users WHERE user_id = ?";
         User u = jdbcTemplate.queryForObject(query, this::getUserFromDb, id);
@@ -83,8 +83,8 @@ public class UserDbStorage implements UserStorage {
     public void deleteById(int id) throws ResponseStatusException {
         if (!containsUser(id)) {
             log.info("User not found");
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND
-                    , "User with the id = " + id + " not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "User with the id = " + id + " not found");
         }
         String query = "DELETE FROM Users WHERE user_id = ?";
         jdbcTemplate.update(query, id);
@@ -118,11 +118,11 @@ public class UserDbStorage implements UserStorage {
         try {
             jdbcTemplate.update(query, id, friendId);
         } catch (DuplicateKeyException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST
-                    , "User with the id= " + friendId + " is already your friend");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "User with the id= " + friendId + " is already your friend");
         } catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST
-                    , "User is not allowed to add oneself to friends");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "User is not allowed to add oneself to friends");
         }
         log.info("User with the id = " + id + " successfully added friend with id = " + friendId);
     }
@@ -136,24 +136,24 @@ public class UserDbStorage implements UserStorage {
         }
         if (!containsUser(friendId)) {
             log.info("Wrong friend id");
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"User with the id= "
-                    + id + " doesn't exist and  cannot be deleted from friends" );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "User with the id= " + id + " doesn't exist and  cannot be deleted from friends" );
         }
         String query = "DELETE FROM Friends WHERE user_id = ? AND friend_id = ?";
         try {
             jdbcTemplate.update(query, id, friendId);
             log.info("User with id " + friendId + " was removed from friends list of user with id " + id);
         } catch (EmptyResultDataAccessException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND
-                    ,"User with the id = " + id + " doesn't have a friend with id = " + friendId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "User with the id = " + id + " doesn't have a friend with id = " + friendId);
         }
     }
 
     @Override
     public List<User> getFriends(int id) {
         if (!containsUser(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND
-                    , "User whose friends list you want to get doesn't exist");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "User whose friends list you want to get doesn't exist");
         }
         String query = "SELECT * FROM Users " +
                 "WHERE user_id IN (SELECT friend_id FROM friends WHERE user_id = ?)";
@@ -183,8 +183,10 @@ public class UserDbStorage implements UserStorage {
     }
 
     private User getUserFromDb(ResultSet resultSet, int rowNum) throws SQLException {
-        User user = new User(resultSet.getString("email"), resultSet.getString("login"),
-                resultSet.getString("name"),resultSet.getDate("birthday").toLocalDate());
+        User user = new User(resultSet.getString("email"),
+                resultSet.getString("login"),
+                resultSet.getString("name"),
+                resultSet.getDate("birthday").toLocalDate());
                 user.setId(resultSet.getInt("user_id"));
         String query = "SELECT * FROM Users " +
                 "WHERE user_id IN (SELECT friend_id  FROM Friends WHERE user_id = ?)";
@@ -193,10 +195,10 @@ public class UserDbStorage implements UserStorage {
     }
 
     private User getFriendFromDb(ResultSet resultSet, int rowNum) throws SQLException {
-        User user = new User(resultSet.getString("email")
-                ,resultSet.getString("login"),
-                resultSet.getString("name")
-                ,resultSet.getDate("birthday").toLocalDate());
+        User user = new User(resultSet.getString("email"),
+                resultSet.getString("login"),
+                resultSet.getString("name"),
+                resultSet.getDate("birthday").toLocalDate());
         user.setId(resultSet.getInt("user_id"));
         return user;
     }

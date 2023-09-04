@@ -32,8 +32,8 @@ public class FilmDbStorage implements FilmStorage {
     public void save(Film f) {
         if (containsFilm(f)) {
             log.info("This film has already been saved");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST
-                    , "This film has already been saved");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "This film has already been saved");
         }
         Integer filmId = addFilmToDb(f);
         f.setId(filmId);
@@ -65,8 +65,8 @@ public class FilmDbStorage implements FilmStorage {
         String query3 = "UPDATE Films " +
                 "SET name = ?, description = ?, " +
                 "release_date = ?, duration = ?, mpa = ? WHERE film_id = ?";
-        jdbcTemplate.update(query3, f.getName(), f.getDescription(), f.getReleaseDate()
-                , f.getDuration(), f.getMpa().getId(), f.getId());
+        jdbcTemplate.update(query3, f.getName(), f.getDescription(), f.getReleaseDate(),
+                f.getDuration(), f.getMpa().getId(), f.getId());
         Film f2 = getById(f.getId());
         log.info("Film was successfully updated");
         return f2;
@@ -96,8 +96,8 @@ public class FilmDbStorage implements FilmStorage {
     public void deleteById(int id) {
         if (!containsFilm(id)) {
             log.info("Film not found");
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND
-                    , "Film with the id = " + id + " not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Film with the id = " + id + " not found");
         }
         String query = "DELETE FROM Films WHERE film_id = ?";
         jdbcTemplate.update(query, id);
@@ -135,12 +135,12 @@ public class FilmDbStorage implements FilmStorage {
         try {
             jdbcTemplate.update(query, filmId, userId);
             log.info("The film was liked");
-        } catch (DuplicateKeyException e ) {
+        } catch (DuplicateKeyException e) {
             log.info("User has already liked this film");
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User has already liked this film");
         } catch (DataIntegrityViolationException e) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST
-                , "It is not allowed to like not existing films");
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                "It is not allowed to like not existing films");
         }
     }
 
@@ -202,19 +202,19 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private User getUserFromDb(ResultSet resultSet, int rowNum) throws SQLException {
-        User u = new User(resultSet.getString("email")
-                , resultSet.getString("login"), resultSet.getString("name")
-                ,resultSet.getDate("birthday").toLocalDate());
+        User u = new User(resultSet.getString("email"),
+                resultSet.getString("login"), resultSet.getString("name"),
+                resultSet.getDate("birthday").toLocalDate());
         u.setId(resultSet.getInt("user_id"));
         return u;
     }
 
     private Film getFilmFromDb(ResultSet resultSet, int rowSum) throws SQLException {
-        Film f = new Film(resultSet.getString("name")
-                , resultSet.getString("description")
-                , resultSet.getDate("release_date").toLocalDate()
-                , resultSet.getInt("duration")
-                , new MPA(resultSet.getInt("mpa"), resultSet.getString("mpa_name")));
+        Film f = new Film(resultSet.getString("name"),
+                resultSet.getString("description"),
+                resultSet.getDate("release_date").toLocalDate(),
+                resultSet.getInt("duration"),
+                new MPA(resultSet.getInt("mpa"), resultSet.getString("mpa_name")));
         f.setId(resultSet.getInt("film_id"));
         String query = "SELECT Users.* FROM Likes " +
                 "JOIN Users ON Likes.user_id = Users.user_id WHERE Likes.film_id=?";
