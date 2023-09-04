@@ -232,9 +232,6 @@ public class FilmDbStorage implements FilmStorage {
                 "JOIN Films_Genres AS fg ON f.film_id=fg.film_id " +
                 "JOIN Genres AS g ON fg.genre_id=g.genre_id WHERE f.film_id = ?";
         Set<Genre> g = new HashSet<>(jdbcTemplate.query(query, this::getGenreFromDb, id));
-        if (g.contains(null)) {
-            return new HashSet<>();
-        }
         return g;
     }
 
