@@ -230,6 +230,9 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private Genre getGenreFromDb(ResultSet rs, int rowSum) throws SQLException {
-        return new Genre(rs.getInt("genre_id"), rs.getString("genre_name"));
+        return Genre.builder()
+                .id(rs.getInt("genre_id"))
+                .name(rs.getString("genre_name"))
+                .build();
     }
 }
