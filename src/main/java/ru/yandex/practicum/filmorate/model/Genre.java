@@ -10,10 +10,4 @@ import lombok.Data;
 public class Genre {
     private Integer id;
     private String name;
-
-    @Override
-    public String toString() {
-        String res = "id: " + id + ", name: " + name;
-        return res;
-    }
 }

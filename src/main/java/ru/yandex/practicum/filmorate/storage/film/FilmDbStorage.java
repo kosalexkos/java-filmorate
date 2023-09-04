@@ -37,7 +37,7 @@ public class FilmDbStorage implements FilmStorage {
         }
         Integer filmId = addFilmToDb(f);
         f.setId(filmId);
-        if (f.getGenres() != null && f.getGenres().size() > 0) {
+        if (f.getGenres().size() > 0) {
             String query = "INSERT INTO Films_Genres (film_id, genre_id) VALUES (?, ?)";
             for (Genre genre : f.getGenres()) {
                 jdbcTemplate.update(query, filmId, genre.getId());
@@ -63,7 +63,7 @@ public class FilmDbStorage implements FilmStorage {
                 "release_date = ?, duration = ?, mpa = ? WHERE film_id = ?";
         jdbcTemplate.update(query2, f.getName(), f.getDescription(), f.getReleaseDate(),
                 f.getDuration(), f.getMpa().getId(), f.getId());
-        if (f.getGenres() != null && f.getGenres().size() > 0) {
+        if (f.getGenres().size() > 0) {
             String query3 = "INSERT INTO Films_Genres (film_id, genre_id) VALUES (?, ?)";
             for (Genre g : f.getGenres()) {
                 jdbcTemplate.update(query3, f.getId(), g.getId());
@@ -71,6 +71,7 @@ public class FilmDbStorage implements FilmStorage {
         }
         Film f2 = getById(f.getId());
         log.info("Film was successfully updated");
+        System.out.println(f2);
         return f2;
     }
 
@@ -84,7 +85,7 @@ public class FilmDbStorage implements FilmStorage {
     public Film getById(int id) {
         String query = "SELECT film_id, name, description, release_date, duration, " +
                 "Films.mpa, MPA.mpa_name FROM Films " +
-                "JOIN MPA ON Films.mpa = MPA.mpa_id WHERE Films.film_id = ?";
+                "LEFT JOIN MPA ON Films.mpa = MPA.mpa_id WHERE Films.film_id = ?";
         try {
             Film f = jdbcTemplate.queryForObject(query, this::getFilmFromDb, id);
             return f;
@@ -222,7 +223,7 @@ public class FilmDbStorage implements FilmStorage {
                 "JOIN Users ON Likes.user_id = Users.user_id WHERE Likes.film_id=?";
         f.getLikes().addAll(jdbcTemplate.query(query, this::getUserFromDb, f.getId()));
         String queryForG = "SELECT fg.genre_id, g.genre_name FROM Films_Genres AS fg " +
-                "JOIN Genres AS g ON fg.genre_id = g.genre_id " +
+                "LEFT JOIN Genres AS g ON fg.genre_id = g.genre_id " +
                 "WHERE fg.film_id = ?";
         f.getGenres().addAll(jdbcTemplate.query(queryForG,
                 this::getGenreFromDb, f.getId()));

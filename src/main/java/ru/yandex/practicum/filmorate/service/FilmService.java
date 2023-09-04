@@ -23,8 +23,7 @@ public class FilmService {
 
     public Film updateFilm(Film film) {
         log.info("Processing request to update film");
-        Film f = storage.update(film);
-        return f;
+        return storage.update(film);
     }
 
     public List<Film> getAllFilms() {
