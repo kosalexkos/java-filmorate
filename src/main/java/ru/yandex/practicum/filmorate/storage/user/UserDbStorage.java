@@ -112,7 +112,7 @@ public class UserDbStorage implements UserStorage {
         if (!containsUser(friendId)) {
             log.info("Wrong friend id");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"User with the id= "
-                    + id + " doesn't exist and cannot be added to friends" );
+                    + id + " doesn't exist and cannot be added to friends");
         }
         String query = "INSERT INTO Friends (user_id, friend_id) VALUES (?, ?)";
         try {
@@ -137,7 +137,7 @@ public class UserDbStorage implements UserStorage {
         if (!containsUser(friendId)) {
             log.info("Wrong friend id");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "User with the id= " + id + " doesn't exist and  cannot be deleted from friends" );
+                    "User with the id= " + id + " doesn't exist and  cannot be deleted from friends");
         }
         String query = "DELETE FROM Friends WHERE user_id = ? AND friend_id = ?";
         try {
@@ -203,7 +203,7 @@ public class UserDbStorage implements UserStorage {
         return user;
     }
 
-    private Integer addToDb (User u) {
+    private Integer addToDb(User u) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("Users")
                 .usingGeneratedKeyColumns("user_id");
