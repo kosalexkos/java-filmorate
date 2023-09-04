@@ -52,11 +52,13 @@ public class FilmDbStorage implements FilmStorage {
             log.info("Wrong id. Film not found");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wrong id. Film not found");
         }
-        try {
-            String query1 = "DELETE FROM Films_Genres WHERE film_id = ?";
-            jdbcTemplate.update(query1, f.getId());
-        } catch (EmptyResultDataAccessException e) {
-            log.info("Film didn't have genres");
+        if (f.getGenres().size() == 0) {
+            try {
+                String query1 = "DELETE FROM Films_Genres WHERE film_id = ?";
+                jdbcTemplate.update(query1, f.getId());
+            } catch (EmptyResultDataAccessException e) {
+                log.info("Film didn't have genres");
+            }
         }
         String query2 = "UPDATE Films " +
                 "SET name = ?, description = ?, " +
