@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@Getter
 @RequestMapping(value = "/films", produces = "application/json")
 @RequiredArgsConstructor
 public class FilmController {
@@ -62,17 +60,15 @@ public class FilmController {
     @PutMapping("/{id}/like/{userId}")
     public ResponseEntity<String> addLike(@PathVariable int id, @PathVariable int userId) {
         log.info("Request from user with id {} to like film with id {}", userId, id);
-        int i = service.addLikeToFilm(id, userId);
-        return ResponseEntity.ok().body("Like was successfully added. " +
-                "The amount of likes is " + i);
+        service.addLikeToFilm(id, userId);
+        return ResponseEntity.ok().body("Like was successfully added.");
     }
 
     @DeleteMapping("/{id}/like/{userId}")
     public ResponseEntity<String> deleteLike(@PathVariable int id, @PathVariable int userId) {
         log.info("Request from user with id {} to delete like from film with id {}", userId, id);
-        int i = service.deleteLike(id, userId);
-        return ResponseEntity.ok().body("Like was successfully deleted. " +
-                "The amount of likes is " + i);
+        service.deleteLike(id, userId);
+        return ResponseEntity.ok().body("Like was successfully deleted.");
     }
 
     @GetMapping("/popular")

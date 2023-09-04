@@ -1,5 +1,6 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.film;
 
+import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
@@ -10,9 +11,7 @@ public interface FilmStorage {
 
     List<Film> getData();
 
-    boolean validateId(int id);
-
-    void update(Film f);
+    Film update(Film f);
 
     Film getById(int id);
 
@@ -21,4 +20,8 @@ public interface FilmStorage {
     void deleteAll();
 
     List<Film> getTop(int count);
+
+    void addLike(int userId, int filmId) throws ResponseStatusException;
+
+    void deleteLike(int userId, int filmId);
 }

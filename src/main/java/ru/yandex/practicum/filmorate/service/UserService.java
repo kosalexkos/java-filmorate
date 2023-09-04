@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -29,12 +27,6 @@ public class UserService {
 
     public User updateUser(User user) {
         log.info("Processing user update");
-        if (!(storage.validateId(user.getId()))) {
-            log.info("Failed to find user to update");
-            throw new DataNotFoundException("Failed to update userdata. User not found");
-        }
-        Set<Integer> friends = storage.getById(user.getId()).getFriends();
-        user.setFriends(friends);
         storage.update(user);
         return user;
     }
@@ -61,38 +53,25 @@ public class UserService {
 
     public void addFriend(int id, int friendId) {
         log.info("Processing request to add user");
-        User u1 = storage.getById(id);
-        User u2 = storage.getById(friendId);
-        u1.getFriends().add(friendId);
-        u2.getFriends().add(id);
+        storage.addFriend(id, friendId);
         log.info("User with id " + friendId + " was added to friends list of user with id " + id);
     }
 
     public void deleteFriend(int id, int friendId) {
-        User u1 = storage.getById(id);
-        User u2 = storage.getById(friendId);
-        if (!u1.getFriends().contains(friendId)) {
-            throw new DataNotFoundException("User with id " + id + " doesn't have friend with id " + friendId);
-        }
-        if (!u2.getFriends().contains(id)) {
-            throw new DataNotFoundException("User with id " + friendId + " doesn't have friend with id " + id);
-        }
-        u1.getFriends().remove(friendId);
-        u2.getFriends().remove(id);
-        log.info("User with id " + friendId + " was removed from friends list of user with id " + id);
+        log.info("Processing deleting of friend");
+        storage.deleteFriend(id, friendId);
     }
 
     public List<User> getFriendsList(int id) {
         log.info("Processing request to get friends list of user with id " + id);
         User u = storage.getById(id);
-        return u.getFriends().stream()
-                .map(storage::getById).collect(Collectors.toList());
+        return new ArrayList<>(u.getFriends());
     }
 
     public List<User> getCommonFriends(int id, int friendId) {
         log.info("Processing request to get common friends with user with id " + friendId);
-        List<User> list = getFriendsList(id);
-        list.retainAll(getFriendsList(friendId));
+        List<User> list = storage.getFriends(id);
+        list.retainAll(storage.getFriends(friendId));
         return list;
     }
 }
