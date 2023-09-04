@@ -59,6 +59,6 @@ public class FilmService {
     }
 
     public List<Film> getTopFilms(int count) {
-        return storage.getTop(count);
+        return new ArrayList<>(storage.getTop(count));
     }
 }

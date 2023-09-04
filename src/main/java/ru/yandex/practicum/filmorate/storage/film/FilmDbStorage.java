@@ -60,7 +60,9 @@ public class FilmDbStorage implements FilmStorage {
         }
         if (f.getGenres() != null && f.getGenres().size() > 0) {
             String query2 = "INSERT INTO Films_Genres (film_id, genre_id) VALUES (?, ?)";
-            f.getGenres().forEach(genre -> jdbcTemplate.update(query2, f.getId(), genre.getId()));
+            for (Genre g : f.getGenres()) {
+                jdbcTemplate.update(query2, f.getId(), g.getId());
+            }
         }
         String query3 = "UPDATE Films " +
                 "SET name = ?, description = ?, " +
@@ -120,7 +122,7 @@ public class FilmDbStorage implements FilmStorage {
                 "GROUP BY f.film_id " +
                 "ORDER BY COUNT(l.film_id) DESC " +
                 "LIMIT ?";
-        return jdbcTemplate.query(query, this::getFilmFromDb, count);
+        return new ArrayList<>(jdbcTemplate.query(query, this::getFilmFromDb, count));
     }
 
     @Override
@@ -227,7 +229,7 @@ public class FilmDbStorage implements FilmStorage {
         String query = "SELECT g.genre_id, g.genre_name FROM Films AS f " +
                 " JOIN Films_Genres AS fg ON f.film_id=fg.film_id " +
                 " JOIN Genres AS g ON fg.genre_id=g.genre_id WHERE f.film_id = ?";
-        return new TreeSet<>(jdbcTemplate.query(query, this::getGenreFromDb, id));
+        return new HashSet<>(jdbcTemplate.query(query, this::getGenreFromDb, id));
     }
 
     private Genre getGenreFromDb(ResultSet rs, int rowSum) throws SQLException {

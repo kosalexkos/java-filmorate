@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -74,7 +75,7 @@ public class FilmController {
     @GetMapping("/popular")
     public List<Film> getTopFilms(@RequestParam(defaultValue = "10") int count) {
         log.info("Request to get top ten films");
-        List<Film> top = service.getTopFilms(count);
+        List<Film> top = new ArrayList<>(service.getTopFilms(count));
         return top;
     }
 }
