@@ -32,10 +32,10 @@ public class Film {
     @EqualsAndHashCode.Exclude
     private Set<User> likes;
     @EqualsAndHashCode.Exclude
-    private Set<Genre> genres;
-    @EqualsAndHashCode.Exclude
     @NotNull
     private MPA mpa;
+    @EqualsAndHashCode.Exclude
+    private Set<Genre> genres;
 
     public Film(@NotNull String name, String description, LocalDate releaseDate, int duration, MPA mpa) {
         this.name = name;
@@ -54,6 +54,7 @@ public class Film {
         values.put("release_date", releaseDate);
         values.put("duration", duration);
         values.put("mpa", mpa.getId());
+        values.put("genres", genres);
         return values;
     }
 }
