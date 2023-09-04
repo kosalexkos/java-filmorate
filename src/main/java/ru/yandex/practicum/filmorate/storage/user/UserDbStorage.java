@@ -50,7 +50,7 @@ public class UserDbStorage implements UserStorage {
     @Override
     public void update(User u) throws ResponseStatusException {
         if (!containsUser(u.getId())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User for update not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User for update not found");
         }
         u.getFriends().addAll(getById(u.getId()).getFriends());
         String query = "UPDATE Users " +
@@ -71,7 +71,7 @@ public class UserDbStorage implements UserStorage {
     public User getById(int id) throws ResponseStatusException {
         if (!containsUser(id)) {
             log.info("User not found");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "User with the id = " + id + " not found");
         }
         String query = "SELECT * FROM Users WHERE user_id = ?";
@@ -111,7 +111,7 @@ public class UserDbStorage implements UserStorage {
         }
         if (!containsUser(friendId)) {
             log.info("Wrong friend id");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"User with the id= "
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"User with the id= "
                     + id + " doesn't exist and cannot be added to friends");
         }
         String query = "INSERT INTO Friends (user_id, friend_id) VALUES (?, ?)";

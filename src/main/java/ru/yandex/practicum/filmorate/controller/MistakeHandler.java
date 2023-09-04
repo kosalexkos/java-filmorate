@@ -32,8 +32,8 @@ public class MistakeHandler {
     }
 
     @ExceptionHandler({ResponseStatusException.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleValidationException(final ResponseStatusException e) {
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, String> handleResponseStatusException(final ResponseStatusException e) {
         return Map.of(
                 "error", e.getMessage()
         );
@@ -41,7 +41,7 @@ public class MistakeHandler {
 
     @ExceptionHandler({EmptyResultDataAccessException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleValidationException(final EmptyResultDataAccessException e) {
+    public Map<String, String> handleEmptyResultDataAccessException(final EmptyResultDataAccessException e) {
         return Map.of(
                 "error", e.getMessage()
         );
@@ -49,7 +49,7 @@ public class MistakeHandler {
 
     @ExceptionHandler({DuplicateKeyException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleValidationException(final DuplicateKeyException e) {
+    public Map<String, String> handleDuplicateKeyException(final DuplicateKeyException e) {
         return Map.of(
                 "error", e.getMessage()
         );
@@ -57,7 +57,7 @@ public class MistakeHandler {
 
     @ExceptionHandler({DataIntegrityViolationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleValidationException(final DataIntegrityViolationException e) {
+    public Map<String, String> handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
         return Map.of(
                 "error", e.getMessage()
         );

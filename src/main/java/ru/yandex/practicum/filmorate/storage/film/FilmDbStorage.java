@@ -50,7 +50,7 @@ public class FilmDbStorage implements FilmStorage {
     public Film update(Film f) {
         if (!containsFilm(f.getId())) {
             log.info("Wrong id. Film not found");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong id. Film not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wrong id. Film not found");
         }
         try {
             String query1 = "DELETE FROM Films_Genres WHERE film_id = ?";
@@ -88,7 +88,7 @@ public class FilmDbStorage implements FilmStorage {
             return f;
         } catch (EmptyResultDataAccessException e) {
             log.info("Wrong id. Film not found");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong id. Film not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wrong id. Film not found");
         }
     }
 
@@ -96,7 +96,7 @@ public class FilmDbStorage implements FilmStorage {
     public void deleteById(int id) {
         if (!containsFilm(id)) {
             log.info("Film not found");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "Film with the id = " + id + " not found");
         }
         String query = "DELETE FROM Films WHERE film_id = ?";
@@ -126,10 +126,10 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public void addLike(int filmId, int userId) throws  ResponseStatusException {
         if (!containsUser(userId)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong user id. User not  found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wrong user id. User not  found");
         }
         if (!containsFilm(filmId)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong film id. Film not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wrong film id. Film not found");
         }
         String query = "INSERT INTO Likes (film_id, user_id) VALUES (?, ?)";
         try {
@@ -147,10 +147,10 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public void deleteLike(int userId, int filmId) {
         if (!containsUser(userId)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong user id. User not  found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wrong user id. User not  found");
         }
         if (!containsFilm(filmId)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong film id. Film not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wrong film id. Film not found");
         }
         String query = "DELETE FROM Likes WHERE user_id = ? AND film_id = ?";
         if (jdbcTemplate.update(query, userId, filmId) == 0) {
