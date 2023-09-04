@@ -13,7 +13,7 @@ public class Genre {
 
     @Override
     public String toString() {
-        String res = "id: "+ id + ", name: " + name;
+        String res = "id: " + id + ", name: " + name;
         return res;
     }
 }
