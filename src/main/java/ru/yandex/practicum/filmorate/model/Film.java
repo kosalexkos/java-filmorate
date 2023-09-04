@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -31,10 +32,10 @@ public class Film {
     private int duration;
     @EqualsAndHashCode.Exclude
     private Set<User> likes;
-    @EqualsAndHashCode.Exclude
+    @JsonProperty("mpa")
     @NotNull
     private MPA mpa;
-    @EqualsAndHashCode.Exclude
+    @JsonProperty("genres")
     private Set<Genre> genres;
 
     public Film(@NotNull String name, String description, LocalDate releaseDate, int duration, MPA mpa) {
