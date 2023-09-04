@@ -69,8 +69,9 @@ public class FilmDbStorage implements FilmStorage {
                 jdbcTemplate.update(query3, f.getId(), g.getId());
             }
         }
+        Film f2 = getById(f.getId());
         log.info("Film was successfully updated");
-        return f;
+        return f2;
     }
 
     @Override
@@ -82,8 +83,8 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Film getById(int id) {
         String query = "SELECT film_id, name, description, release_date, duration, " +
-                "Films.mpa, MPA.mpa_name " +
-        "FROM Films JOIN MPA ON Films.mpa = MPA.mpa_id WHERE Films.film_id = ?";
+                "Films.mpa, MPA.mpa_name FROM Films " +
+                "JOIN MPA ON Films.mpa = MPA.mpa_id WHERE Films.film_id = ?";
         try {
             Film f = jdbcTemplate.queryForObject(query, this::getFilmFromDb, id);
             return f;
@@ -116,8 +117,8 @@ public class FilmDbStorage implements FilmStorage {
     public List<Film> getTop(int count) {
         String query = "SELECT f.film_id, f.name, f.description, " +
                 "f.release_date, f.duration, f.mpa, m.mpa_name FROM Films f " +
-                "INNER JOIN Likes l ON f.film_id = l.film_id " +
-                "INNER JOIN MPA m ON f.mpa = m.mpa_id " +
+                "LEFT JOIN Likes l ON f.film_id = l.film_id " +
+                "LEFT JOIN MPA m ON f.mpa = m.mpa_id " +
                 "GROUP BY f.film_id " +
                 "ORDER BY COUNT(l.film_id) DESC " +
                 "LIMIT ?";
@@ -226,8 +227,8 @@ public class FilmDbStorage implements FilmStorage {
 
     private Set<Genre> getGenresByFilmId(Integer id) {
         String query = "SELECT g.genre_id, g.genre_name FROM Films AS f " +
-                " JOIN Films_Genres AS fg ON f.film_id=fg.film_id " +
-                " JOIN Genres AS g ON fg.genre_id=g.genre_id WHERE f.film_id = ?";
+                "LEFT JOIN Films_Genres AS fg ON f.film_id=fg.film_id " +
+                "LEFT JOIN Genres AS g ON fg.genre_id=g.genre_id WHERE f.film_id = ?";
         return new HashSet<>(jdbcTemplate.query(query, this::getGenreFromDb, id));
     }
 
