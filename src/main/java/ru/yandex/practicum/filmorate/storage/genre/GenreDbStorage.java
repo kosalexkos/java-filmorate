@@ -33,7 +33,7 @@ public class GenreDbStorage implements GenreStorage {
         try {
             genre = jdbcTemplate.queryForObject(sqlQuery, this::getGenreFromDb, id);
         } catch (EmptyResultDataAccessException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Genre with an id=" + id + " not found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Genre with an id=" + id + " not found");
         }
         return genre;
     }

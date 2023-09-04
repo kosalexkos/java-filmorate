@@ -33,7 +33,7 @@ public class MpaDbStorage implements MpaStorage {
         try {
             mpa = jdbcTemplate.queryForObject(sqlQuery, this::makeMpa, id);
         } catch (EmptyResultDataAccessException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "MPA rate with the id=" + id + " not found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "MPA rate with the id=" + id + " not found");
         }
         return mpa;
     }
