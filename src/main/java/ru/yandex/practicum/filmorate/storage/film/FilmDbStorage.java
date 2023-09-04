@@ -231,10 +231,14 @@ public class FilmDbStorage implements FilmStorage {
         String query = "SELECT g.genre_id, g.genre_name FROM Films AS f " +
                 "LEFT JOIN Films_Genres AS fg ON f.film_id=fg.film_id " +
                 "LEFT JOIN Genres AS g ON fg.genre_id=g.genre_id WHERE f.film_id = ?";
+
         return new HashSet<>(jdbcTemplate.query(query, this::getGenreFromDb, id));
     }
 
     private Genre getGenreFromDb(ResultSet rs, int rowSum) throws SQLException {
+        if (rowSum == 0) {
+            return null;
+        }
         return new Genre(rs.getInt("genre_id"), rs.getString("genre_name"));
     }
 }
