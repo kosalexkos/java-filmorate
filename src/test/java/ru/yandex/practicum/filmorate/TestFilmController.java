@@ -70,8 +70,9 @@ public class TestFilmController {
                 filmController.createFilm(new Film("AAA", "AAAAAAAAA",
                         LocalDate.of(1986,4,26), 598, new MPA(2,"PG"))),
                 filmController.createFilm(new Film("AA", "AAAAAA",
-                        LocalDate.of(1996,8,15), 441,new MPA(1,"R"))));
+                        LocalDate.of(1996,8,15), 441,new MPA(1,"G"))));
         assertEquals(2, filmController.getAll().size());
+        System.out.println(filmController.getAll());
         assertEquals(l, filmController.getAll());
     }
 
