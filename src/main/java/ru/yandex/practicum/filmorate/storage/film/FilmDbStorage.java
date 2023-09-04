@@ -58,20 +58,19 @@ public class FilmDbStorage implements FilmStorage {
         } catch (EmptyResultDataAccessException e) {
             log.info("Film didn't have genres");
         }
-        if (f.getGenres() != null && f.getGenres().size() > 0) {
-            String query2 = "INSERT INTO Films_Genres (film_id, genre_id) VALUES (?, ?)";
-            for (Genre g : f.getGenres()) {
-                jdbcTemplate.update(query2, f.getId(), g.getId());
-            }
-        }
-        String query3 = "UPDATE Films " +
+        String query2 = "UPDATE Films " +
                 "SET name = ?, description = ?, " +
                 "release_date = ?, duration = ?, mpa = ? WHERE film_id = ?";
-        jdbcTemplate.update(query3, f.getName(), f.getDescription(), f.getReleaseDate(),
+        jdbcTemplate.update(query2, f.getName(), f.getDescription(), f.getReleaseDate(),
                 f.getDuration(), f.getMpa().getId(), f.getId());
-        Film f2 = getById(f.getId());
+        if (f.getGenres() != null && f.getGenres().size() > 0) {
+            String query3 = "INSERT INTO Films_Genres (film_id, genre_id) VALUES (?, ?)";
+            for (Genre g : f.getGenres()) {
+                jdbcTemplate.update(query3, f.getId(), g.getId());
+            }
+        }
         log.info("Film was successfully updated");
-        return f2;
+        return f;
     }
 
     @Override
