@@ -52,13 +52,11 @@ public class FilmDbStorage implements FilmStorage {
             log.info("Wrong id. Film not found");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wrong id. Film not found");
         }
-        if (f.getGenres().size() == 0) {
-            try {
-                String query1 = "DELETE FROM Films_Genres WHERE film_id = ?";
-                jdbcTemplate.update(query1, f.getId());
-            } catch (EmptyResultDataAccessException e) {
-                log.info("Film didn't have genres");
-            }
+        try {
+            String query1 = "DELETE FROM Films_Genres WHERE film_id = ?";
+            jdbcTemplate.update(query1, f.getId());
+        } catch (EmptyResultDataAccessException e) {
+            log.info("Film didn't have genres");
         }
         String query2 = "UPDATE Films " +
                 "SET name = ?, description = ?, " +
@@ -223,16 +221,12 @@ public class FilmDbStorage implements FilmStorage {
         String query = "SELECT Users.* FROM Likes " +
                 "JOIN Users ON Likes.user_id = Users.user_id WHERE Likes.film_id=?";
         f.getLikes().addAll(jdbcTemplate.query(query, this::getUserFromDb, f.getId()));
-        f.getGenres().addAll(getGenresByFilmId(f.getId()));
+        String queryForG = "SELECT fg.genre_id, g.genre_name FROM Films_Genres AS fg " +
+                "JOIN Genres AS g ON fg.genre_id = g.genre_id " +
+                "WHERE fg.film_id = ?";
+        f.getGenres().addAll(jdbcTemplate.query(queryForG,
+                this::getGenreFromDb, f.getId()));
         return f;
-    }
-
-    private Set<Genre> getGenresByFilmId(Integer id) {
-        String query = "SELECT g.genre_id, g.genre_name FROM Films AS f " +
-                "JOIN Films_Genres AS fg ON f.film_id=fg.film_id " +
-                "JOIN Genres AS g ON fg.genre_id=g.genre_id WHERE f.film_id = ?";
-        Set<Genre> g = new HashSet<>(jdbcTemplate.query(query, this::getGenreFromDb, id));
-        return g;
     }
 
     private Genre getGenreFromDb(ResultSet rs, int rowSum) throws SQLException {
