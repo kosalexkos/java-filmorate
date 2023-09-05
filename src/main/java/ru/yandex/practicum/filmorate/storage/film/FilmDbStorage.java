@@ -71,7 +71,6 @@ public class FilmDbStorage implements FilmStorage {
         }
         Film f2 = getById(f.getId());
         log.info("Film was successfully updated");
-        System.out.println(f2);
         return f2;
     }
 
@@ -100,7 +99,7 @@ public class FilmDbStorage implements FilmStorage {
         if (!containsFilm(id)) {
             log.info("Film not found");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Film with the id = " + id + " not found");
+                    String.format("Film with the id = %s not found", id));
         }
         String query = "DELETE FROM Films WHERE film_id = ?";
         jdbcTemplate.update(query, id);

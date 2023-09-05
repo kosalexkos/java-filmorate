@@ -1,9 +1,11 @@
 package ru.yandex.practicum.filmorate.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
+import lombok.experimental.FieldDefaults;
 import org.hibernate.validator.constraints.Length;
 import org.jetbrains.annotations.NotNull;
 import ru.yandex.practicum.filmorate.validation.AfterDate;
@@ -17,26 +19,27 @@ import java.util.Set;
 import java.util.Map;
 
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Film {
     @EqualsAndHashCode.Exclude
-    private int id;
+    int id;
     @NotBlank
     @NonNull
-    private String name;
+    String name;
     @Length(max = 200, message = "Description should not be longer than 200 symbols")
-    private String description;
+    String description;
     @AfterDate
     @PastOrPresent
-    private LocalDate releaseDate;
+    LocalDate releaseDate;
     @PositiveOrZero(message = "Film duration cannot be less than zero")
-    private int duration;
+    int duration;
     @EqualsAndHashCode.Exclude
-    private Set<User> likes;
+    Set<User> likes;
     @JsonProperty("mpa")
     @NotNull
-    private MPA mpa;
+    MPA mpa;
     @JsonProperty("genres")
-    private Set<Genre> genres;
+    Set<Genre> genres;
 
     public Film(@NotNull String name, String description, LocalDate releaseDate, int duration, MPA mpa) {
         this.name = name;

@@ -47,7 +47,7 @@ public class FilmController {
     public ResponseEntity<String> deleteById(@PathVariable int id) {
         log.info("Request to delete film by id: {}", id);
         service.deleteFilmById(id);
-        return ResponseEntity.ok().body("Film with id : " + id + " was successfully deleted");
+        return ResponseEntity.ok().body(String.format("Film with id : %s was successfully deleted", id));
     }
 
     @DeleteMapping()
@@ -61,19 +61,19 @@ public class FilmController {
     public ResponseEntity<String> addLike(@PathVariable int id, @PathVariable int userId) {
         log.info("Request from user with id {} to like film with id {}", userId, id);
         service.addLikeToFilm(id, userId);
-        return ResponseEntity.ok().body("Like was successfully added.");
+        return ResponseEntity.ok().body(String.format("User with id %s liked film with id %s", userId, id));
     }
 
     @DeleteMapping("/{id}/like/{userId}")
     public ResponseEntity<String> deleteLike(@PathVariable int id, @PathVariable int userId) {
         log.info("Request from user with id {} to delete like from film with id {}", userId, id);
         service.deleteLike(id, userId);
-        return ResponseEntity.ok().body("Like was successfully deleted.");
+        return ResponseEntity.ok().body(String.format("User with id %s delete like from film with id %s", userId, id));
     }
 
     @GetMapping("/popular")
     public List<Film> getTopFilms(@RequestParam(defaultValue = "10") int count) {
-        log.info("Request to get top ten films");
+        log.info("Request to get top {} films", count);
         List<Film> top = new ArrayList<>(service.getTopFilms(count));
         return top;
     }

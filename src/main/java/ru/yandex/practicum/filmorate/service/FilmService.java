@@ -32,7 +32,7 @@ public class FilmService {
     }
 
     public void deleteFilmById(int id) {
-        log.info("Processing request to delete film by id");
+        log.info("Processing request to delete film with id {}", id);
         storage.deleteById(id);
     }
 
@@ -42,17 +42,17 @@ public class FilmService {
     }
 
     public Film getFilmById(int id) {
-        log.info("Processing request to get film by id");
+        log.info("Processing request to get film with id {}", id);
         return storage.getById(id);
     }
 
     public void addLikeToFilm(int filmId, int userId) {
-        log.info("Processing request to like film");
+        log.info("Processing request to like film with id {} from user with id {}", filmId, userId);
         storage.addLike(filmId,userId);
     }
 
     public void deleteLike(int filmId, int userId) {
-        log.info("Processing like deleting");
+        log.info("Processing deleting like from film with id {} by user with id {}", filmId, userId);
         storage.deleteLike(userId,filmId);
         log.info("Like was deleted");
     }

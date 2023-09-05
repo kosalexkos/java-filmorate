@@ -106,46 +106,46 @@ public class UserDbStorage implements UserStorage {
     public void addFriend(int id, int friendId) throws ResponseStatusException {
         if (!containsUser(id)) {
             log.info("Wrong user id");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with the id= "
-                    + id + " doesn't exist");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("User with the id = %s doesn't exist", id));
         }
         if (!containsUser(friendId)) {
             log.info("Wrong friend id");
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"User with the id= "
-                    + id + " doesn't exist and cannot be added to friends");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("User with the id = %s doesn't exist and cannot be added to friends", friendId));
         }
         String query = "INSERT INTO Friends (user_id, friend_id) VALUES (?, ?)";
         try {
             jdbcTemplate.update(query, id, friendId);
         } catch (DuplicateKeyException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "User with the id= " + friendId + " is already your friend");
+                    String.format("User with the id = %s is already in your friend list", friendId));
         } catch (DataIntegrityViolationException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "User is not allowed to add oneself to friends");
         }
-        log.info("User with the id = " + id + " successfully added friend with id = " + friendId);
+        log.info("User with the id = {} successfully added friend with id = {}", id, friendId);
     }
 
     @Override
     public void deleteFriend(int id, int friendId) throws ResponseStatusException {
         if (!containsUser(id)) {
             log.info("Wrong user id");
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with the id= "
-                    + id + " doesn't exist");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("User with the id = %s doesn't exist", id));
         }
         if (!containsUser(friendId)) {
             log.info("Wrong friend id");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "User with the id= " + id + " doesn't exist and  cannot be deleted from friends");
+                    String.format("User with the id = %s doesn't exist and cannot be deleted from friends", friendId));
         }
         String query = "DELETE FROM Friends WHERE user_id = ? AND friend_id = ?";
         try {
             jdbcTemplate.update(query, id, friendId);
-            log.info("User with id " + friendId + " was removed from friends list of user with id " + id);
+            log.info("User with id {} was removed from friends list of user with id {}", friendId, id);
         } catch (EmptyResultDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "User with the id = " + id + " doesn't have a friend with id = " + friendId);
+                    String.format("User with the id = %s doesn't have a friend with id = %s", id, friendId));
         }
     }
 

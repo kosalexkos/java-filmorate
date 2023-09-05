@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
@@ -12,17 +14,18 @@ import java.util.Map;
 import java.util.Set;
 
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
-    private int id;
+    int id;
     @Email
-    private String email;
+    String email;
     @Pattern(regexp = "^[^\\s]+$", message = "String should not contain spaces")
     @NotBlank
-    private String login;
-    private String name;
+    String login;
+    String name;
     @PastOrPresent
-    private LocalDate birthday;
-    private Set<User> friends;
+    LocalDate birthday;
+    Set<User> friends;
 
     public User(@NotBlank String email, @NotBlank String login, String nickname, LocalDate birthday) {
         this.email = email;

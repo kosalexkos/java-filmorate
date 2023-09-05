@@ -37,12 +37,12 @@ public class UserService {
     }
 
     public User getUserById(int id) {
-        log.info("Processing request to get user by id");
+        log.info("Processing request to get user with id {}", id);
         return storage.getById(id);
     }
 
     public void deleteUserById(int id) {
-        log.info("Processing request to delete user");
+        log.info("Processing request to delete user with id {}", id);
         storage.deleteById(id);
     }
 
@@ -52,24 +52,24 @@ public class UserService {
     }
 
     public void addFriend(int id, int friendId) {
-        log.info("Processing request to add user");
+        log.info("Processing request to add user with id {} to friends list of user with id {}", friendId, id);
         storage.addFriend(id, friendId);
-        log.info("User with id " + friendId + " was added to friends list of user with id " + id);
+        log.info("User with id {} was added to friends list of user with id {}", friendId, id);
     }
 
     public void deleteFriend(int id, int friendId) {
-        log.info("Processing deleting of friend");
+        log.info("Processing deleting user with id {} from friends list of user with id {}", friendId, id);
         storage.deleteFriend(id, friendId);
     }
 
     public List<User> getFriendsList(int id) {
-        log.info("Processing request to get friends list of user with id " + id);
+        log.info("Processing request to get friends list of user with id {}", id);
         User u = storage.getById(id);
         return new ArrayList<>(u.getFriends());
     }
 
     public List<User> getCommonFriends(int id, int friendId) {
-        log.info("Processing request to get common friends with user with id " + friendId);
+        log.info("Processing request to get list of common friends of user with id {} and user with id", id, friendId);
         List<User> list = storage.getFriends(id);
         list.retainAll(storage.getFriends(friendId));
         return list;
