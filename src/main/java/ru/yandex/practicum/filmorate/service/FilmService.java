@@ -4,11 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import java.util.*;
-
 
 @Service
 @Slf4j
@@ -25,14 +23,7 @@ public class FilmService {
 
     public Film updateFilm(Film film) {
         log.info("Processing request to update film");
-        if (!storage.validateId(film.getId())) {
-            log.info("Failed to find film to update");
-            throw new DataNotFoundException("Failed to update film data. Film not found");
-        }
-        Set<Integer> likes = storage.getById(film.getId()).getLikes();
-        film.setLikes(likes);
-        storage.update(film);
-        return film;
+        return storage.update(film);
     }
 
     public List<Film> getAllFilms() {
@@ -41,7 +32,7 @@ public class FilmService {
     }
 
     public void deleteFilmById(int id) {
-        log.info("Processing request to delete film by id");
+        log.info("Processing request to delete film with id {}", id);
         storage.deleteById(id);
     }
 
@@ -51,30 +42,22 @@ public class FilmService {
     }
 
     public Film getFilmById(int id) {
-        log.info("Processing request to get film by id");
+        log.info("Processing request to get film with id {}", id);
         return storage.getById(id);
     }
 
-    public int addLikeToFilm(int filmId, int userId) {
-        log.info("Processing request to like film");
-        Film f = storage.getById(filmId);
-        f.getLikes().add(userId);
-        log.info("Film with id " + filmId + " was liked by user with id " + userId);
-        return f.getLikes().size();
+    public void addLikeToFilm(int filmId, int userId) {
+        log.info("Processing request to like film with id {} from user with id {}", filmId, userId);
+        storage.addLike(filmId,userId);
     }
 
-    public int deleteLike(int filmId, int userId) {
-        log.info("Processing like deleting");
-        Film f = storage.getById(filmId);
-        if (!f.getLikes().contains(userId)) {
-            throw new DataNotFoundException("User didn't like this film");
-        }
-        f.getLikes().remove(userId);
+    public void deleteLike(int filmId, int userId) {
+        log.info("Processing deleting like from film with id {} by user with id {}", filmId, userId);
+        storage.deleteLike(userId,filmId);
         log.info("Like was deleted");
-        return f.getLikes().size();
     }
 
     public List<Film> getTopFilms(int count) {
-        return storage.getTop(count);
+        return new ArrayList<>(storage.getTop(count));
     }
 }

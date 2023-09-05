@@ -2,32 +2,38 @@ package ru.yandex.practicum.filmorate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.jdbc.Sql;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.time.LocalDate;
 import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-
+@AutoConfigureTestDatabase
 @SpringBootTest
+@Sql(scripts = {"file:src/main/resources/schema.sql", "file:src/main/resources/data.sql"})
 public class TestUserController {
-    Validator validator;
+    private Validator validator;
     private UserController userController;
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
     @BeforeEach
     void beforeEach() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
-        userController = new UserController(new UserService(new InMemoryUserStorage()));
+        userController = new UserController(new UserService(new UserDbStorage(jdbcTemplate)));
     }
 
     @Test

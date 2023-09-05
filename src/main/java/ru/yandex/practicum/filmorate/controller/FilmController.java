@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +8,11 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @RestController
-@Getter
 @RequestMapping(value = "/films", produces = "application/json")
 @RequiredArgsConstructor
 public class FilmController {
@@ -35,8 +34,7 @@ public class FilmController {
     @PutMapping
     public Film updateFilm(@Valid @RequestBody Film film) {
         log.info("Request to update film");
-        service.updateFilm(film);
-        return film;
+        return service.updateFilm(film);
     }
 
     @GetMapping("/{id}")
@@ -49,7 +47,7 @@ public class FilmController {
     public ResponseEntity<String> deleteById(@PathVariable int id) {
         log.info("Request to delete film by id: {}", id);
         service.deleteFilmById(id);
-        return ResponseEntity.ok().body("Film with id : " + id + " was successfully deleted");
+        return ResponseEntity.ok().body(String.format("Film with id : %s was successfully deleted", id));
     }
 
     @DeleteMapping()
@@ -62,23 +60,21 @@ public class FilmController {
     @PutMapping("/{id}/like/{userId}")
     public ResponseEntity<String> addLike(@PathVariable int id, @PathVariable int userId) {
         log.info("Request from user with id {} to like film with id {}", userId, id);
-        int i = service.addLikeToFilm(id, userId);
-        return ResponseEntity.ok().body("Like was successfully added. " +
-                "The amount of likes is " + i);
+        service.addLikeToFilm(id, userId);
+        return ResponseEntity.ok().body(String.format("User with id %s liked film with id %s", userId, id));
     }
 
     @DeleteMapping("/{id}/like/{userId}")
     public ResponseEntity<String> deleteLike(@PathVariable int id, @PathVariable int userId) {
         log.info("Request from user with id {} to delete like from film with id {}", userId, id);
-        int i = service.deleteLike(id, userId);
-        return ResponseEntity.ok().body("Like was successfully deleted. " +
-                "The amount of likes is " + i);
+        service.deleteLike(id, userId);
+        return ResponseEntity.ok().body(String.format("User with id %s delete like from film with id %s", userId, id));
     }
 
     @GetMapping("/popular")
     public List<Film> getTopFilms(@RequestParam(defaultValue = "10") int count) {
-        log.info("Request to get top ten films");
-        List<Film> top = service.getTopFilms(count);
+        log.info("Request to get top {} films", count);
+        List<Film> top = new ArrayList<>(service.getTopFilms(count));
         return top;
     }
 }

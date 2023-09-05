@@ -40,15 +40,15 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable int id) {
-        log.info("Request to get user by id");
+        log.info("Request to get user withh id {}", id);
         return service.getUserById(id);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable int id) {
-        log.info("Request to delete user by id");
+        log.info("Request to delete user with id {}", id);
         service.deleteUserById(id);
-        return ResponseEntity.ok().body("User with id " + id + " was successfully removed");
+        return ResponseEntity.ok().body(String.format("User with id %s was successfully removed", id));
     }
 
     @DeleteMapping()
@@ -62,19 +62,21 @@ public class UserController {
     public ResponseEntity<String> addFriend(@PathVariable int id, @PathVariable int friendId) {
         log.info("Request from user with id {} to add user with id {} to friends list", id, friendId);
         service.addFriend(id, friendId);
-        return ResponseEntity.ok().body("User with id " + friendId + " was added to your friends list");
+        return ResponseEntity.ok().body(String.format("User with id %s added to friends list user with id %s",
+                id, friendId));
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
     public ResponseEntity<String> deleteFriend(@PathVariable int id, @PathVariable int friendId) {
         log.info("Request from user with id {} to delete user with id {} from friends list", id, friendId);
         service.deleteFriend(id, friendId);
-        return ResponseEntity.ok().body("User with id " + friendId + " was removed from your friends list");
+        return ResponseEntity.ok().body(String.format("User with id %s deleted from friends list user with id %s",
+                id, friendId));
     }
 
     @GetMapping("/{id}/friends")
     public ResponseEntity<List<User>> getFriendsList(@PathVariable int id) {
-        log.info("Request to get friends list of the user with id " + id);
+        log.info("Request to get friends list of the user with id {}", id);
         List<User> f = service.getFriendsList(id);
         return ResponseEntity.ok(f);
     }
